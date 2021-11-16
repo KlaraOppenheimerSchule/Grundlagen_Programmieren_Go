@@ -1,4 +1,4 @@
-package main
+package TankenMain
 
 import (
 	"bufio"
@@ -42,11 +42,11 @@ func (station GasStation) refuel(fuel string, amount float32) float32 {
 	return price
 }
 
-func main() {
+func TankenMain() {
 	station := GasStation{Fuel{1.54, "Diesel"}, Fuel{1.64, "Benzin"}}
 	reader := bufio.NewReader(os.Stdin)
-	f, _ := reader.ReadString('\n') // welches Fuel
-	a, _ := reader.ReadString('\n') // wie viel
+	f, _ := reader.ReadString('\n') // which Fuel
+	a, _ := reader.ReadString('\n') // how much
 
 	var s float32
 	if s, err := strconv.ParseFloat(a, 32); err == nil {
