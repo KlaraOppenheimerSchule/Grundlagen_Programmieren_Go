@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 )
 
 type Fuel struct {
@@ -26,16 +25,17 @@ func (fuel Fuel) getPrice() float32 {
 }
 
 func (station GasStation) refuel(fuel string, amount float32) float32 {
-	fmt.Print("You chose: ", fuel)
+	fmt.Println("You chose: ", fuel)
 	var fuelChosen Fuel
 	if fuel == "Diesel" {
 		fuelChosen = station.fuel1
 	} else if fuel == "Benzin" {
 		fuelChosen = station.fuel2
 	}
-	fmt.Print("price/L: ", fuelChosen.getPrice())
+	fmt.Println("price/L: ", fuelChosen.getPrice())
 	price := fuelChosen.getPrice() * amount
 	if amount >= 100 {
+		fmt.Println("You got a discount of 5%")
 		price = price * 0.95
 	}
 
@@ -43,17 +43,22 @@ func (station GasStation) refuel(fuel string, amount float32) float32 {
 }
 
 func main() {
-	station := GasStation{Fuel{1.54, "Diesel"}, Fuel{1.64, "Benzin"}}
-	reader := bufio.NewReader(os.Stdin)
-	f, _ := reader.ReadString('\n') // which Fuel
-	a, _ := reader.ReadString('\n') // how much
+	var amount float32
+	var a64 float64
+	input := bufio.NewScanner(os.Stdin)
 
-	var s float32
-	if s, err := strconv.ParseFloat(a, 32); err == nil {
-		fmt.Println(s)
+	station := GasStation{Fuel{1.54, "Diesel"}, Fuel{1.64, "Benzin"}}
+	fmt.Print("Choose your fuel: ")
+	input.Scan() // which Fuel
+	f := input.Text()
+	fmt.Print("Your amount: ")
+	_, err := fmt.Scanf("%f", &a64)
+
+	if err != nil {
+		fmt.Println(err)
 	}
-	if s, err := strconv.ParseFloat(a, 64); err == nil {
-		fmt.Println(s)
-	}
-	station.refuel(f, s)
+
+	amount = float32(a64)
+
+	fmt.Print("You have to pay: ", station.refuel(f, amount))
 }
